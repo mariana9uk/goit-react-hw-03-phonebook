@@ -41,8 +41,9 @@ removeContact = (contactId)=>{
   };
 
   getFilteredContacts = () => {
-    const { contacts, filter } = this.state;
-    return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
+    const { filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    return (this.state.contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter)));
   };
 componentDidUpdate(prevProps, prevState){
   if(prevState.contacts!==this.state.contacts){
@@ -52,7 +53,10 @@ localStorage.setItem("contact", JSON.stringify(this.state.contacts))
 componentDidMount(){
  const contacts= localStorage.getItem("contact");
  const parsedContacts = JSON.parse(contacts);
- this.setState({contacts: parsedContacts})
+ if (parsedContacts) {
+  this.setState({contacts: parsedContacts})
+ }
+
 }
    
   render() {
